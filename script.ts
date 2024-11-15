@@ -1,4 +1,5 @@
-// // lisiting our elements here
+// Listing our elements here
+
 // List of element IDs to check
 const ids = ['name', 'email', 'phone', 'cnic', 'address', 'nationality', 'education', 'experience', 'skills'];
 const elements = ids.map(id => document.getElementById(id));
@@ -16,9 +17,12 @@ if (!form || !resumeDisplayElement) {
     console.error('Form or resume display element is missing.');
 } else {
     form.addEventListener('submit', (event: Event) => {
-        event.preventDefault(); // To prevent page from reload
+        event.preventDefault(); // To prevent page reload
 
-        // Getting input values    
+        // Getting input values 
+        const fileInput = document.getElementById('profilePicture') as HTMLInputElement | null;
+        let profilePictureURL: string = '';
+
         const name = (document.getElementById('name') as HTMLInputElement)?.value || '';
         const email = (document.getElementById('email') as HTMLInputElement)?.value || '';
         const phone = (document.getElementById('phone') as HTMLInputElement)?.value || '';
@@ -27,15 +31,31 @@ if (!form || !resumeDisplayElement) {
         const nationality = (document.getElementById('nationality') as HTMLInputElement)?.value || '';
         const education = (document.getElementById('education') as HTMLInputElement)?.value || '';
         const experience = (document.getElementById('experience') as HTMLInputElement)?.value || '';
-        const skills = (document.getElementById('skill') as HTMLInputElement)?.value || '';
+        const skills = (document.getElementById('skills') as HTMLInputElement)?.value || '';  // Fixed the ID to 'skills' from 'skill'
+
+        // Handle profile picture
+        if (fileInput && fileInput.files && fileInput.files.length > 0) {
+            const profilePictureFile = fileInput.files[0]; // Get the first selected file
+            // Create a URL for the selected file
+            profilePictureURL = URL.createObjectURL(profilePictureFile);
+        } else {
+            profilePictureURL = ''; // No file selected
+        }
+
+        // Generate the image HTML if the profile picture exists
+        const imageHTML = profilePictureURL 
+            ? `<img src="${profilePictureURL}" alt="Profile Picture" class="profilePicture">`
+            : '';
 
         // Create resume output
         const resumeHTML = `
-            <h2>Resume</h2>
-            <h3>Personal Information</h3> 
+            <h2>RESUME</h2>
+            
+            
+            ${imageHTML} <!-- Inject profile picture here -->
             <p><strong>Name:</strong> ${name}</p>
             <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Number:</strong> ${phone}</p>
+            <p><strong>Phone:</strong> ${phone}</p>
             <p><strong>CNIC:</strong> ${cnic}</p>
             <p><strong>Address:</strong> ${address}</p>
             <p><strong>Nationality:</strong> ${nationality}</p>
